@@ -24,7 +24,7 @@ class Page(models.Model):
         return self.urlpath + '  ' + self.title
 
     def get_absolute_url(self):
-        return reverse('page', args=[self.slug])
+        return reverse('page', args=[self.urlpath])
 
     def save(self, *args, **kwargs):
         if not kwargs.get('commit', False):
@@ -40,22 +40,24 @@ class Page(models.Model):
 
     def clear_cached_props(self):
         self._siblings = None
-        self._breadcrumbs = None
+        self._ancestors = None
 
     def siblings(self):
-        if not self._siblings:
-            self._siblings = self.parent.children
+        if not (hasattr(self, '_siblings') and self._siblings):
+            self._siblings = self.parent.children.all()
         return self._siblings
 
-    def breadcrumbs(self):
-        if self._breadcrumbs:
-            return self._breadcrumbs
+    def ancestors(self):
+        if self.parent is None:
+            return []
+        if hasattr(self, '_ancestors') and self._ancestors:
+            return self._ancestors
         path_list = None
         for i in self.urlpath.split('/')[:-1]:
             if path_list:
                 path_list.append('/'.join((path_list[-1], i)))
             else:
                 path_list = [i]
-        self._breadcrumbs = Page.objects.filter(
+        self._ancestors = Page.objects.filter(
                 urlpath__in=path_list).order_by('urlpath')
-        return self._breadcrumbs
+        return self._ancestors
