@@ -3,9 +3,8 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-MINICMS_HOME_SLUG = 'index'
 CKEDITOR_UPLOAD_PATH = "minicms"
-CKEDITOR_IMAGE_BACKEND = 'pillow'  # NOt require, but a good idea
+CKEDITOR_IMAGE_BACKEND = 'pillow'  # Not required, but a good idea
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/

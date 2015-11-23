@@ -5,8 +5,9 @@ from django.conf import settings
 import minicms
 
 urlpatterns = [
-    url(r'^pages/', include('minicms.urls')),
+    url(r'^$', ListView.as_view(model=minicms.models.Page)),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'', include('minicms.urls')),
 ]
 
 if settings.DEBUG:
