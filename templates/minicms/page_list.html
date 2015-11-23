@@ -1,0 +1,17 @@
+<html>
+<head><title>Minicms demo home</title></head>
+<body>
+    <ul>
+    {%for page in object_list%}
+    <li>
+        {%if page.parent%}
+            {%for crumb in page.ancestors%}
+                {{crumb.title}} &gt;
+            {%endfor%}
+        {%endif%}
+        <a href="{{page.get_absolute_url}}">{{page.title}}</a>
+    </li>
+    {%endfor%}
+    </ul>
+</body>
+</html>

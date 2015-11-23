@@ -9,8 +9,6 @@ from .models import Page
 
 
 def page_view(request, urlpath):
-    if urlpath == settings.MINICMS_HOME_SLUG:
-        raise Http404
     page = get_object_or_404(Page.objects.select_related('parent'),
         urlpath=urlpath)
     tmpls = ['minicms.html']
@@ -20,13 +18,3 @@ def page_view(request, urlpath):
         tmpls.append(tmplpath + '.html')
     tmpls.reverse()
     return render(request, tmpls, {'page': page})
-
-
-def home_view(request):
-    if not settings.MINICMS_HOME_SLUG:
-        raise Http404
-    return render(request, ['minicms.html', 'minicms/index.html'], {
-        'page': get_object_or_404(
-            Page, parent=None, slug=settings.MINICMS_HOME_SLUG
-        )
-    })

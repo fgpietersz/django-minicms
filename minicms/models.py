@@ -19,6 +19,7 @@ class Page(models.Model):
 
     class Meta:
         unique_together = ('slug','parent')
+        ordering = ('position',)
 
     def __str__(self):
         return self.urlpath + '  ' + self.title
@@ -44,7 +45,7 @@ class Page(models.Model):
 
     def siblings(self):
         if not (hasattr(self, '_siblings') and self._siblings):
-            self._siblings = self.parent.children.all()
+            self._siblings = Page.objects.filter(parent=self.parent)
         return self._siblings
 
     def ancestors(self):
