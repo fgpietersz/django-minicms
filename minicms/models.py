@@ -40,8 +40,8 @@ class Page(models.Model):
             super(Page, self).save(*args, **kwargs)
 
     def clear_cached_props(self):
-        self._siblings = None
-        self._ancestors = None
+        self._siblings = []
+        self._ancestors = []
 
     def siblings(self):
         if not (hasattr(self, '_siblings') and self._siblings):

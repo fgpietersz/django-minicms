@@ -5,6 +5,7 @@ from django.contrib import admin
 from django import forms
 
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from admirarchy.toolbox import HierarchicalModelAdmin
 
 from .models import Page
 
@@ -17,9 +18,14 @@ class PageAdminForm(forms.ModelForm):
             'content': CKEditorUploadingWidget(config_name='minicms')}
 
 
-class PageAdmin(admin.ModelAdmin):
+class PageAdmin(HierarchicalModelAdmin):
+    hierarchy = True
     form = PageAdminForm
     prepopulated_fields = {'slug': ('title',)}
-    list_display = ('urlpath', 'title', 'slug')
+    list_display = ('list_title', 'position', 'slug')
+    ordering = ('position',)
+
+    def list_title(self, page):
+        return ' ⇒ '.join([p.title for p in (list(page.ancestors()) + [page])])
 
 admin.site.register(Page, PageAdmin)
