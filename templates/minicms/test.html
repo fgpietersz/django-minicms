@@ -1,0 +1,27 @@
+<html>
+<head>
+    <title>{{page.title}}</title>
+</head>
+<body>
+    {%if page.ancestors%}
+        <div>
+        {%for crumb in page.ancestors%}
+            <a href="{{crumb.get_absolute_url}}">{{crumb.title}}</a> &gt;
+        {%endfor%}
+        </div>
+    {%endif%}
+    <div>
+    {%for sib in page.siblings%}
+        <a href="{{sib.get_absolute_url}}">{{sib.title}}</a>
+    {%endfor%}
+    </div>
+    <div>
+    {%for child in page.children.all%}
+        <a href="{{child.get_absolute_url}}">{{child.title}}</a>
+    {%endfor%}
+    </div>
+    <h1>{{page.title}}</h1>
+    <div>{{page.content|safe}}</div>
+
+</body>
+</html>
