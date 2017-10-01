@@ -22,7 +22,7 @@ class PageAdmin(HierarchicalModelAdmin):
     hierarchy = True
     form = PageAdminForm
     prepopulated_fields = {'slug': ('title',)}
-    list_display = ('list_title', 'position', 'slug')
+    list_display = ('list_title', 'position', 'slug', 'published')
     ordering = ('position',)
 
     def list_title(self, page):
