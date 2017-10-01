@@ -10,7 +10,7 @@ from .models import Page
 
 def page_view(request, urlpath):
     page = get_object_or_404(Page.objects.select_related('parent'),
-        urlpath=urlpath)
+        urlpath=urlpath, published=True)
     tmpls = ['minicms.html']
     tmplpath = 'minicms'
     for slug in urlpath.split('/'):

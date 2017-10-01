@@ -12,10 +12,15 @@ class Page(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     slug = models.SlugField(max_length=50)
+    published = models.BooleanField(default=True)
     position = models.PositiveIntegerField(default=1000)
     parent = models.ForeignKey('self', related_name='children',
         null=True, blank=True, db_index=True)
     urlpath = models.CharField(max_length=1000, editable=False, unique=True)
+
+    _siblings = None
+    _ancestors = None
+    _child_pages = None
 
     class Meta:
         unique_together = ('slug','parent')
@@ -40,18 +45,23 @@ class Page(models.Model):
             super(Page, self).save(*args, **kwargs)
 
     def clear_cached_props(self):
-        self._siblings = []
-        self._ancestors = []
+        self._siblings = None
+        self._ancestors = None
+        self._child_pages = None
 
     def siblings(self):
-        if not (hasattr(self, '_siblings') and self._siblings):
-            self._siblings = Page.objects.filter(parent=self.parent)
+        if self._siblings is not None:
+            self._siblings = Page.objects.filter(
+                parent=self.parent, published=True)
         return self._siblings
+
+    def child_pages(self):
+        self.children.filter(published=True)
 
     def ancestors(self):
         if self.parent is None:
             return []
-        if hasattr(self, '_ancestors') and self._ancestors:
+        if self._ancestors is not None:
             return self._ancestors
         path_list = None
         for i in self.urlpath.split('/')[:-1]:
@@ -60,5 +70,5 @@ class Page(models.Model):
             else:
                 path_list = [i]
         self._ancestors = Page.objects.filter(
-                urlpath__in=path_list).order_by('urlpath')
+                urlpath__in=path_list, published=True).order_by('urlpath')
         return self._ancestors
