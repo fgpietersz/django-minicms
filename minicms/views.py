@@ -11,6 +11,9 @@ from .models import Page
 def page_view(request, urlpath):
     page = get_object_or_404(Page.objects.select_related('parent'),
         urlpath=urlpath, published=True)
+    ancestors = page.ancestors()
+    if any(a.published == False for a in ancestors):
+        raise Http404
     tmpls = ['minicms.html']
     tmplpath = 'minicms'
     for slug in urlpath.split('/'):
