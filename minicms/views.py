@@ -2,8 +2,8 @@
 from __future__ import (absolute_import, division, unicode_literals)
 
 from django.shortcuts import render, get_object_or_404
-from django.conf import settings
 from django.http import Http404
+from django.conf import settings
 
 from .models import Page
 
@@ -20,4 +20,8 @@ def page_view(request, urlpath):
         tmplpath = tmplpath + '/' + slug
         tmpls.append(tmplpath + '.html')
     tmpls.reverse()
-    return render(request, tmpls, {'page': page})
+    return render(request, tmpls, {'page': page, 'ancestors': ancestors})
+
+
+def home_page(request):
+    return page_view(request, settings.HOME_PAGE_PATH)
