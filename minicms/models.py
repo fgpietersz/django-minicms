@@ -30,7 +30,9 @@ class Page(models.Model):
         return self.urlpath + ': ' + self.title
 
     def get_absolute_url(self):
-        return reverse('page', args=[self.urlpath])
+        return (reverse('minicms:page', args=[self.urlpath])
+                if self.urlpath else
+                reverse('minicms:home'))
 
     def save(self, *args, **kwargs):
         if not kwargs.get('commit', False):
