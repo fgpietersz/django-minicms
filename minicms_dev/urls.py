@@ -1,19 +1,20 @@
-from django.conf.urls import include, url
+from django.urls import include, path
 from django.contrib import admin
 from django.conf import settings
 from django.views.generic import ListView
-from django.views.static import serve as static_serve
+from django.conf.urls.static import static
 
-import minicms
+import minicms.urls
+import ckeditor_uploader.urls
 
 urlpatterns = [
-    url(r'^$', ListView.as_view(model=minicms.models.Page)),
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'', include('minicms.urls')),
+    path('', ListView.as_view(model=minicms.models.Page)),
+    path('admin/', admin.site.urls),
+    path('ckeditor/', include(ckeditor_uploader.urls)),
 ]
 
+
 if settings.DEBUG:
-    urlpatterns += [
-        url(r'^media/(?P<path>.*)$', static_serve,
-            {'document_root': settings.MEDIA_ROOT}),
-    ]
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += [path('', include(minicms.urls))]

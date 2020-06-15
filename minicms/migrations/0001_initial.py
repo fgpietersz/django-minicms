@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('slug', models.SlugField()),
                 ('position', models.PositiveIntegerField()),
                 ('urlpath', models.CharField(unique=True, max_length=1000, editable=False)),
-                ('parent', models.ForeignKey(related_name='children', to='minicms.Page', null=True)),
+                ('parent', models.ForeignKey(on_delete=models.PROTECT, related_name='children', to='minicms.Page', null=True)),
             ],
         ),
     ]

@@ -3,11 +3,9 @@ from __future__ import (absolute_import, division, unicode_literals)
 
 from django.db import models
 from django.db import transaction
-from django.core.urlresolvers import reverse
-from django.utils.encoding import python_2_unicode_compatible
+from django.urls import reverse
 
 
-@python_2_unicode_compatible
 class Page(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
@@ -15,7 +13,8 @@ class Page(models.Model):
     published = models.BooleanField(default=True)
     position = models.PositiveIntegerField(default=1000)
     parent = models.ForeignKey('self', related_name='children',
-                               null=True, blank=True, db_index=True)
+                               null=True, blank=True, db_index=True,
+                               on_delete=models.PROTECT)
     urlpath = models.CharField(max_length=1000, editable=False, unique=True)
 
     _siblings = None

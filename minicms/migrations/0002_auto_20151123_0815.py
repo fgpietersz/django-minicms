@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='page',
             name='parent',
-            field=models.ForeignKey(related_name='children', blank=True, to='minicms.Page', null=True),
+            field=models.ForeignKey(on_delete=models.PROTECT, related_name='children', blank=True, to='minicms.Page', null=True),
         ),
         migrations.AlterField(
             model_name='page',

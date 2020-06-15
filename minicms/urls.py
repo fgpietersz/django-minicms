@@ -1,11 +1,13 @@
-from django.conf.urls import include, url
+from django.urls import include, path, re_path
 
 from minicms import views
+import ckeditor_uploader.urls
 
 app_name = 'minicms'
 
 urlpatterns = [
-    url(r'^$', views.home_page, name='home'),
-    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
-    url(r'^(?P<urlpath>.+)/$', views.page_view, name='page'),
+    path('', views.home_page, name='home'),
+    #re_path('ckeditor/', include(ckeditor_uploader.urls)),
+    #re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
+    re_path(r'^(?P<urlpath>.+)/$', views.page_view, name='page'),
 ]
